@@ -1,0 +1,10 @@
+name: 522-milestone
+channels:
+  - conda-forge
+dependencies:
+  - ucimlrepo
+  - scikit-learn
+  - pandas
+  - altair
+  - python
+  - numpygt
