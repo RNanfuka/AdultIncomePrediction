@@ -8,6 +8,7 @@ date: "2025-11-20"
 ```{python}
 from ucimlrepo import fetch_ucirepo 
 import pandas as pd
+import numpy as np
   
 # fetch dataset 
 adult = fetch_ucirepo(id=2) 
@@ -22,4 +23,45 @@ adult_df = pd.concat([X, y], axis = 1)
 adult_df.to_csv("../data/adult.csv", index=False)
 
 
+```
+
+```{python}
+adult_df.head(5)
+
+```
+```{python}
+adult_df.tail(5)
+
+```
+```{python}
+adult_df.shape
+```
+
+```{python}
+adult_df.info()
+```
+
+```{python}
+adult_df.describe().T.round(2)
+```
+```{python}
+adult_df.nunique()
+```
+```{python}
+adult_df.isnull().sum()
+```
+
+```{python}
+for col in adult_df.columns:
+    print(f"Unique values in column '{col}':")
+    print(adult_df[col].unique())
+    print("-" * 20)
+```
+
+```{python}
+adult_df.replace('?', np.nan, inplace=True)
+```
+
+```{python}
+adult_df.isnull().sum()
 ```
