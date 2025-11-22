@@ -1,5 +1,9 @@
 # College Major Analysis
 
+## Introduction
+This project uses the Adult Income dataset to explore general patterns in income inequality. Our aim is to understand, at a high level, how personal and work-related characteristics relate to income categories and to build a clear, reproducible starting point for further analysis.
+
+
 ## Contributors
 - Chun-Mien Liu
 - Rebecca Rosette Nanfuka
@@ -8,14 +12,14 @@
 
 ## Project overview
 
-This project explores the U.S. college majors dataset (`data/recent-grads.csv`) to understand how fields of study influence employment rates, salaries, and demographic outcomes. The analysis is designed to surface broad labor-market patterns (e.g., which majors have the lowest unemployment or the highest earnings) so that educators and students can get a 10,000-foot view of the trade-offs among different disciplines.
+This project examines the Adult Income dataset to understand how demographic and socioeconomic factors influence whether an individual earns more or less than $50,000 per year. By analyzing variables such as age, education level, occupation, marital status, work hours, and race, the project uncovers broad patterns in income distribution and highlights which characteristics are most strongly associated with higher earnings. The goal is to provide a clear, high-level perspective on income inequality across different demographic groups while building a reproducible and transparent foundation for further data exploration and modeling.
 
 ## How to run the analysis
-1. Clone the repository and move into it: `git clone <repo-url> && cd CollegeMajorAnalysis`.
+1. Clone the repository and move into it: `git clone <repo-url> && cd AdultIncomePrediction`.
 2. Build the Conda environment defined in `environment.yml`: `conda env create -f environment.yml`.
-3. Activate the environment: `conda activate college-major-analysis`.
+3. Activate the environment: `conda activate adult-income-prediction`.
 4. Launch Jupyter Lab from the project root: `jupyter lab`.
-5. Open or create your analysis notebook (e.g., `reports/college_major_analysis.ipynb`), point it to `data/recent-grads.csv`, and execute the cells to reproduce the charts and summary metrics.
+5. Open or create your analysis notebook (e.g., `reports/income-prediction.ipynb`), point it to `data/adult.csv`, and execute the cells to reproduce the charts and summary metrics.
 
 ## Dependencies
 - Python 3.12+
@@ -25,3 +29,11 @@ This project explores the U.S. college majors dataset (`data/recent-grads.csv`) 
 
 ## License
 This repository is distributed under the MIT License (see `LICENSE` for the full text).
+
+## References
+
+UCI Machine Learning Repository. (1996). Adult Dataset.
+Retrieved from: https://archive.ics.uci.edu/dataset/2/adult
+Kohavi, R. (1996). Scaling Up the Accuracy of Naive-Bayes Classifiers: A Decision-Tree Hybrid. Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD).
+U.S. Census Bureau. Current Population Survey (CPS). https://www.census.gov/programs-surveys/cps.html
+

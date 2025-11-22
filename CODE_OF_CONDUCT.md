@@ -1,4 +1,4 @@
-# College Major Analysis – Team Code of Conduct
+# Adult Income Prediction – Team Code of Conduct
 
 ## Introduction
 
