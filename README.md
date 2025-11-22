@@ -1,4 +1,4 @@
-# College Major Analysis
+# Adult Income Prediction
 
 ## Introduction
 This project uses the Adult Income dataset to explore general patterns in income inequality. Our aim is to understand, at a high level, how personal and work-related characteristics relate to income categories and to build a clear, reproducible starting point for further analysis.
