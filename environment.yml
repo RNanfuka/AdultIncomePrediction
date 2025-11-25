@@ -3,11 +3,12 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - ucimlrepo
   - numpy
-  - scikit-learn
   - python
-  - pandas
-  - ipykernel
+  - ucimlrepo
   - matplotlib
   - altair-all=5.5.0
+  - ipykernel
+  - scikit-learn
+  - pandas
+  - conda-lock
