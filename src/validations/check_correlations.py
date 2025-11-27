@@ -91,7 +91,12 @@ def run_tests(df: pd.DataFrame) -> bool:
         )
 
     report = pd.DataFrame(results, columns=["test", "pass_fail", "num_pairs", "num_flagged", "flagged_pairs"])
+    print("**** Correlation validation ****")
     print(report.to_string(index=False))
+    print(
+        "Each row summarizes a check: num_pairs = total correlations examined, "
+        "num_flagged = correlations over threshold, flagged_pairs = offenders."
+    )
 
     return all(row["pass_fail"] == "PASS" for row in results)
 
