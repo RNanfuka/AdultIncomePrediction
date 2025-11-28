@@ -8,7 +8,6 @@ Checks:
 
 from __future__ import annotations
 
-import argparse
 from typing import Dict
 
 import numpy as np
@@ -114,19 +113,7 @@ correlation_schema = pa.DataFrameSchema(
 )
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Validate dataset correlations with pandera.")
-    parser.add_argument(
-        "--data",
-        default="data/adult.csv",
-        help="Path to CSV file to validate (default: data/adult.csv)",
-    )
-    args = parser.parse_args()
-
-    df = pd.read_csv(args.data)
+def validate_correlation_schema(file_path) -> None:
+    df = pd.read_csv(file_path)
     correlation_schema.validate(df, lazy=True)
     print("Correlation checks passed.")
-
-
-if __name__ == "__main__":
-    main()
