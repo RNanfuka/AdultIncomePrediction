@@ -45,3 +45,7 @@ up: ## stop and start docker-compose services
 .PHONY: stop
 stop: ## stop docker-compose services
 	docker-compose stop
+
+.PHONY: data-validate
+data-validate:
+	python ./src/validations/data_validation_tests.py
