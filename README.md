@@ -21,6 +21,19 @@ This project examines the Adult Income dataset to understand how demographic and
 4. Launch Jupyter Lab from the project root: `jupyter lab`.
 5. Open or create your analysis notebook (e.g., `reports/income-prediction.ipynb`), point it to `data/adult.csv`, and execute the cells to reproduce the charts and summary metrics.
 
+## Data validation
+Use the checklist-driven validator in `analysis/data_validation.py` to verify that the Adult Income dataset matches the expected schema and quality thresholds.
+
+```bash
+python analysis/data_validation.py data/adult.csv
+```
+
+Omit the file argument to automatically validate the default dataset at `data/adult.csv`.
+
+Each row in the output corresponds to an item in the validation checklist (file format, column names, missingness, dtypes, duplicates, outliers, category levels, target distribution, and correlation screens). Any failing check prints the offending columns or metrics so you can take corrective action.
+
+Pandera users: if the `pandera` package is installed in the active environment, the validator automatically runs an additional schema check that enforces the data types, ranges, and categorical domains defined for the Adult dataset.
+
 ## Dependencies
 - Python 3.12+
 - pandas
@@ -36,4 +49,3 @@ UCI Machine Learning Repository. (1996). Adult Dataset.
 Retrieved from: https://archive.ics.uci.edu/dataset/2/adult
 Kohavi, R. (1996). Scaling Up the Accuracy of Naive-Bayes Classifiers: A Decision-Tree Hybrid. Proceedings of the Second International Conference on Knowledge Discovery and Data Mining (KDD).
 U.S. Census Bureau. Current Population Survey (CPS). https://www.census.gov/programs-surveys/cps.html
-
