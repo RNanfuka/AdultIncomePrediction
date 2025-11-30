@@ -8,6 +8,20 @@ NUMERIC_BOUNDS = {
     "education-num": (1, 16),
 }
 
+REQUIRED_COLUMNS = [
+    "age",
+    "workclass",
+    "fnlwgt",
+    "education",
+    "education-num",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "income",
+]
+
 # Enumerations ensure we only keep the well-known category spelling variants.
 CATEGORY_LEVELS = {
     "workclass": {
@@ -139,6 +153,46 @@ def _check_target_distribution(df: pd.DataFrame) -> bool:
     return True
 
 
+def test_required_columns(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if required columns are present; optionally raise on failure."""
+    missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
+    if missing and raise_on_fail:
+        raise ValueError(f"Missing required columns: {missing}")
+    return not missing
+
+
+def test_no_empty_rows(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if no rows are entirely empty; optionally raise on failure."""
+    has_empty = (df.isna().all(axis=1)).any()
+    if has_empty and raise_on_fail:
+        raise ValueError("Empty rows found.")
+    return not has_empty
+
+
+def test_no_outliers(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if numeric values are within bounds; optionally raise on failure."""
+    ok = _check_no_outliers(df)
+    if not ok and raise_on_fail:
+        raise ValueError("Found numeric values outside expected bounds.")
+    return ok
+
+
+def test_category_levels(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if categories have expected values and multiple levels; optionally raise on failure."""
+    ok = _check_category_levels(df)
+    if not ok and raise_on_fail:
+        raise ValueError("Unexpected category labels or single-level categorical columns detected.")
+    return ok
+
+
+def test_target_distribution(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if target class balance is within tolerance; optionally raise on failure."""
+    ok = _check_target_distribution(df)
+    if not ok and raise_on_fail:
+        raise ValueError("Income distribution drifts beyond allowed tolerance.")
+    return ok
+
+
 def test_data_content(df) -> None:
     schema = pa.DataFrameSchema(
         {
@@ -170,4 +224,14 @@ def test_data_content(df) -> None:
     )
 
     schema.validate(df)
-    print("Data content checks passed.")
+
+
+def get_tests(df, raise_on_fail: bool = True):
+    """Return a list of (name, callable) tests for data content validation."""
+    return [
+        ("required columns present", lambda: test_required_columns(df, raise_on_fail)),
+        ("no empty rows found", lambda: test_no_empty_rows(df, raise_on_fail)),
+        ("numeric values within bounds", lambda: test_no_outliers(df, raise_on_fail)),
+        ("valid category levels", lambda: test_category_levels(df, raise_on_fail)),
+        ("target distribution within tolerance", lambda: test_target_distribution(df, raise_on_fail)),
+    ]
