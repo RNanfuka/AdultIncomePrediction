@@ -142,17 +142,123 @@ def _check_target_distribution(df: pd.DataFrame) -> bool:
 def test_data_content(df) -> None:
     schema = pa.DataFrameSchema(
         {
-            "age": pa.Column(),
-            "workclass": pa.Column(nullable=True),
-            "fnlwgt": pa.Column(),
-            "education": pa.Column(),
-            "education-num": pa.Column(),
-            "marital-status": pa.Column(),
-            "occupation": pa.Column(nullable=True),
-            "relationship": pa.Column(),
-            "race": pa.Column(),
-            "sex": pa.Column(),
-            "income": pa.Column(),
+            "age": pa.Column(
+                int,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'age' column."
+                    )
+                ]
+            ),
+            "workclass": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'workclass' column."
+                    )
+                ],
+                nullable=True
+            ),
+            "fnlwgt": pa.Column(
+                int,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'fnlwgt' column."
+                    )
+                ]
+            ),
+            "education": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'education' column."
+                    )
+                ]
+            ),
+            "education-num": pa.Column(
+                int,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'education-num' column."
+                    )
+                ]
+            ),
+            "marital-status": pa.Column(
+                str,
+                checks=[
+                    pa.Check.isin([
+                        "Divorced", "Married-AF-spouse", "Married-civ-spouse",
+                        "Married-spouse-absent", "Never-married", "Separated", "Widowed"
+                    ]),
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'marital-status' column."
+                    )
+                ]
+            ),
+            "occupation": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'occupation' column."
+                    )
+                ],
+                nullable=True
+            ),
+            "relationship": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.1,
+                        element_wise=False,
+                        error="Too many null values in 'relationship' column."
+                    )
+                ]
+            ),
+            "race": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.10,
+                        element_wise=False,
+                        error="Too many null values in 'race' column."
+                    )
+                ]
+            ),
+            "sex": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.10,
+                        element_wise=False,
+                        error="Too many null values in 'sex' column."
+                    )
+                ]
+            ),
+            "income": pa.Column(
+                str,
+                checks=[
+                    pa.Check(
+                        lambda s: s.isna().mean() <= 0.10,
+                        element_wise=False,
+                        error="Too many null values in 'income' column."
+                    )
+                ],
+                nullable=False
+            )
         },
         checks=[
             # Code adopted from https://ubc-dsci.github.io/reproducible-and-trustworthy-workflows-for-data-science/lectures/135-data_validation-python-pandera.html
@@ -166,6 +272,8 @@ def test_data_content(df) -> None:
                 _check_target_distribution,
                 error="Income distribution drifts beyond allowed tolerance.",
             ),
+            pa.Check(lambda df: ~df.duplicated().any(), error="Duplicate rows found.")
+
         ],
     )
 
