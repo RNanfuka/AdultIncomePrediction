@@ -47,5 +47,5 @@ stop: ## stop docker-compose services
 	docker-compose stop
 
 .PHONY: data-validate
-data-validate:
+data-validate: ## run data validation tests
 	python ./src/validations/data_validation_tests.py
