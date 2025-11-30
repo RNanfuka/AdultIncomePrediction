@@ -66,7 +66,7 @@ def check_feature_correlations(df: pd.DataFrame) -> tuple[bool, dict]:
 
 
 def run_tests(df: pd.DataFrame) -> bool:
-    """Run correlation checks, print a small report, and return True only if all pass."""
+    """Run correlation checks and return True only if all pass."""
     checks = [
         ("target_correlations", check_target_correlations),
         ("feature_correlations", check_feature_correlations),
@@ -89,14 +89,6 @@ def run_tests(df: pd.DataFrame) -> bool:
             }
         )
 
-    report = pd.DataFrame(results, columns=["test", "pass_fail", "num_pairs", "num_flagged", "flagged_pairs"])
-    print("**** Correlation validation ****")
-    print(report.to_string(index=False))
-    print(
-        "Each row summarizes a check: num_pairs = total correlations examined, "
-        "num_flagged = correlations over threshold, flagged_pairs = offenders."
-    )
-
     return all(row["pass_fail"] == "PASS" for row in results)
 
 
@@ -115,4 +107,29 @@ correlation_schema = pa.DataFrameSchema(
 
 def validate_correlation_schema(df) -> None:
     correlation_schema.validate(df, lazy=True)
-    print("Correlation checks passed.")
+
+
+def test_target_correlations(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if target correlations are under the limit; optionally raise on failure."""
+    passed, meta = check_target_correlations(df)
+    if not passed and raise_on_fail:
+        flagged = meta.get("flagged", {})
+        raise ValueError(f"High target correlations found: {flagged}")
+    return passed
+
+
+def test_feature_correlations(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if feature correlations are under the limit; optionally raise on failure."""
+    passed, meta = check_feature_correlations(df)
+    if not passed and raise_on_fail:
+        flagged = meta.get("flagged", {})
+        raise ValueError(f"High feature correlations found: {flagged}")
+    return passed
+
+
+def get_tests(df: pd.DataFrame, raise_on_fail: bool = True):
+    """Return a list of (name, callable) tests for correlation validation."""
+    return [
+        ("target correlations below limit", lambda: test_target_correlations(df, raise_on_fail)),
+        ("feature correlations below limit", lambda: test_feature_correlations(df, raise_on_fail)),
+    ]
