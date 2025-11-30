@@ -22,6 +22,20 @@ REQUIRED_COLUMNS = [
     "income",
 ]
 
+NULL_RATE_LIMITS = {
+    "age": 0.10,
+    "workclass": 0.10,
+    "fnlwgt": 0.10,
+    "education": 0.10,
+    "education-num": 0.10,
+    "marital-status": 0.10,
+    "occupation": 0.10,
+    "relationship": 0.10,
+    "race": 0.10,
+    "sex": 0.10,
+    "income": 0.10,
+}
+
 # Enumerations ensure we only keep the well-known category spelling variants.
 CATEGORY_LEVELS = {
     "workclass": {
@@ -121,6 +135,16 @@ def _check_no_outliers(df: pd.DataFrame) -> bool:
     return True
 
 
+def _check_null_rates(df: pd.DataFrame) -> bool:
+    """Confirm columns stay within allowed null-rate limits."""
+    for column, limit in NULL_RATE_LIMITS.items():
+        if column not in df.columns:
+            return False
+        if df[column].isna().mean() > limit:
+            return False
+    return True
+
+
 def _check_category_levels(df: pd.DataFrame) -> bool:
     """Confirm categorical values use the expected spellings and retain multiple levels."""
     for column, allowed in CATEGORY_LEVELS.items():
@@ -177,6 +201,14 @@ def test_no_outliers(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
     return ok
 
 
+def test_null_rates(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if columns meet null-rate limits; optionally raise on failure."""
+    ok = _check_null_rates(df)
+    if not ok and raise_on_fail:
+        raise ValueError("Columns exceed allowed null-rate limits.")
+    return ok
+
+
 def test_category_levels(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
     """Return True if categories have expected values and multiple levels; optionally raise on failure."""
     ok = _check_category_levels(df)
@@ -191,6 +223,14 @@ def test_target_distribution(df: pd.DataFrame, raise_on_fail: bool = True) -> bo
     if not ok and raise_on_fail:
         raise ValueError("Income distribution drifts beyond allowed tolerance.")
     return ok
+
+
+def test_no_duplicate_rows(df: pd.DataFrame, raise_on_fail: bool = True) -> bool:
+    """Return True if no duplicate rows exist; optionally raise on failure."""
+    has_dupes = df.duplicated().any()
+    if has_dupes and raise_on_fail:
+        raise ValueError("Duplicate rows found.")
+    return not has_dupes
 
 
 def test_data_content(df) -> None:
@@ -339,7 +379,9 @@ def get_tests(df, raise_on_fail: bool = True):
     return [
         ("required columns present", lambda: test_required_columns(df, raise_on_fail)),
         ("no empty rows found", lambda: test_no_empty_rows(df, raise_on_fail)),
+        ("columns respect null limits", lambda: test_null_rates(df, raise_on_fail)),
         ("numeric values within bounds", lambda: test_no_outliers(df, raise_on_fail)),
         ("valid category levels", lambda: test_category_levels(df, raise_on_fail)),
         ("target distribution within tolerance", lambda: test_target_distribution(df, raise_on_fail)),
+        ("no duplicate rows found", lambda: test_no_duplicate_rows(df, raise_on_fail)),
     ]

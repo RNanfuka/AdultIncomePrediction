@@ -48,7 +48,7 @@ def main() -> None:
 
     table = pd.DataFrame(results, columns=["test", "status", "error"])
     print("**** Validation Results ****")
-    print(table.to_string(index=False, justify="left"))
+    print(table.to_string(index=False))
 
     if any(result["status"] == "FAIL" for result in results):
         raise SystemExit(1)
