@@ -49,3 +49,8 @@ stop: ## stop docker-compose services
 .PHONY: data-validate
 data-validate: ## run data validation tests
 	python ./src/validations/data_validation_tests.py
+
+
+..PHONY: model-train
+model: ## train model with cross-validation and top-n selection
+	python scripts/modeling.py data/processed/train_preprocessed.csv data/output img --cv-folds 2 --top-n 5
