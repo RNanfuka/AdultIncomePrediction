@@ -13,11 +13,11 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: e40f72e331add436a3a80ae7df1811d9aecf3ebef48e1d13e060c505f5ffbd71
-    osx-64: 1e91bb8c8d2cc9a4e194dfcc0ba0420e7782b9d577d5da95b7f95c51bd26f07b
-    osx-arm64: 538d8320dab51fbc37437b96a5173c3d274ac46937999cb5e47a3f0e6f658852
-    win-64: 028e0043f0ce66d6c2ff6bf9b2879da777eb1b459a0f37ca236c0b8a4de672a5
-    linux-aarch64: 7e3b0465ff84c52d4fb11656a5e73c9f798279189d653e686a9a3ed6bcb6ae49
+    linux-64: 43dc780e0f83db5b184591884562196105a47c275eca7bb04a24787e3d66e839
+    osx-64: 8c349060b62fa2be247303bb92b18911bb55be0b72d9241b11bbd55cd4e5fdf6
+    osx-arm64: e68bc60a391429ee4e19c358f1dda3557ebea7d124600493d9e25d83f8046e1b
+    win-64: 242e2ed2cb01536559418924d645b369e852d084519bbc9a61342cdec41b640a
+    linux-aarch64: 4ba435bb07da015de7d15a32c539828f35d2cc0e86cc8e9f9f736cb2563befab
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -951,6 +951,72 @@ package:
   hash:
     md5: a22d1fd9bf98827e280a02875d9a007a
     sha256: b32f8362e885f1b8417bac2b3da4db7323faa12d5db62b7fd6691c02d60d6f59
+  category: main
+  optional: false
+- name: click
+  version: 8.3.1
+  manager: conda
+  platform: linux-64
+  dependencies:
+    __unix: ''
+    python: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/click-8.3.1-pyh8f84b5b_1.conda
+  hash:
+    md5: ea8a6c3256897cc31263de9f455e25d9
+    sha256: 38cfe1ee75b21a8361c8824f5544c3866f303af1762693a178266d7f198e8715
+  category: main
+  optional: false
+- name: click
+  version: 8.3.1
+  manager: conda
+  platform: linux-aarch64
+  dependencies:
+    __unix: ''
+    python: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/click-8.3.1-pyh8f84b5b_1.conda
+  hash:
+    md5: ea8a6c3256897cc31263de9f455e25d9
+    sha256: 38cfe1ee75b21a8361c8824f5544c3866f303af1762693a178266d7f198e8715
+  category: main
+  optional: false
+- name: click
+  version: 8.3.1
+  manager: conda
+  platform: osx-64
+  dependencies:
+    __unix: ''
+    python: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/click-8.3.1-pyh8f84b5b_1.conda
+  hash:
+    md5: ea8a6c3256897cc31263de9f455e25d9
+    sha256: 38cfe1ee75b21a8361c8824f5544c3866f303af1762693a178266d7f198e8715
+  category: main
+  optional: false
+- name: click
+  version: 8.3.1
+  manager: conda
+  platform: osx-arm64
+  dependencies:
+    __unix: ''
+    python: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/click-8.3.1-pyh8f84b5b_1.conda
+  hash:
+    md5: ea8a6c3256897cc31263de9f455e25d9
+    sha256: 38cfe1ee75b21a8361c8824f5544c3866f303af1762693a178266d7f198e8715
+  category: main
+  optional: false
+- name: click
+  version: 8.3.1
+  manager: conda
+  platform: win-64
+  dependencies:
+    __win: ''
+    colorama: ''
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/click-8.3.1-pyha7b4d00_1.conda
+  hash:
+    md5: 6cd3ccc98bacfcc92b2bd7f236f01a7e
+    sha256: c3bc9a49930fa1c3383a1485948b914823290efac859a2587ca57a270a652e08
   category: main
   optional: false
 - name: colorama
