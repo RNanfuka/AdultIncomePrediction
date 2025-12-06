@@ -1,5 +1,6 @@
 
 import pandas as pd
+import numpy as np
 
 #Input
 adult_df = pd.read_csv("../data/train.csv")
