@@ -27,8 +27,10 @@ def main(input_dir, train_out_dir, test_out_dir):
 
     #Output 
     adult_df.to_csv(train_out_dir + "train.csv", index=False) 
-    
     data_test.to_csv(test_out_dir + "test.csv", index=False)
+
+    click.echo(f"Saved train.csv to file directory {train_out_dir}")
+    click.echo(f"Saved test.csv to file directory {test_out_dir}")
 
 if __name__ == '__main__':
     main()
