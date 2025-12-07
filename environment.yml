@@ -13,7 +13,8 @@ dependencies:
   - matplotlib
   - requests
   - pandera
-  - click
+  - tabulate
+  - jupyter
   - pip
   - pip:
     - vegafusion
