@@ -11,7 +11,7 @@ Outputs:
 - Tuned models (pickles) under `<artifacts_dir>/models/`
 
 Inputs:
-- `--data-dir`: base data folder containing `processed/train_preprocessed.csv`
+- `--data-dir`: base data folder containing `processed/preprocessed_train.csv`
 - `--artifacts-dir`: base folder where artifacts will be written
 """
 
@@ -219,7 +219,7 @@ def save_table_image(df: pd.DataFrame, output_path: Path, title: str) -> None:
     default="data",
     show_default=True,
     type=click.Path(path_type=Path),
-    help="Base data directory containing processed/train_preprocessed.csv",
+    help="Base data directory containing processed/preprocessed_train.csv",
 )
 @click.option(
     "--artifacts-dir",
@@ -280,7 +280,7 @@ def main(
     figures_dir = ensure_dir(artifacts_dir / "figures")
     models_dir = ensure_dir(artifacts_dir / "models")
 
-    train_path = data_dir / "processed" / "train_preprocessed.csv"
+    train_path = data_dir / "processed" / "preprocessed_train.csv"
     X_train, y_train = load_training_data(str(train_path))
 
     models = build_models()
