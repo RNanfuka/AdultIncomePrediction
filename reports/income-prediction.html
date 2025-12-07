@@ -55,7 +55,7 @@ div.csl-indent {
 <link href="income-prediction_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="income-prediction_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="income-prediction_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="income-prediction_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="income-prediction_files/libs/bootstrap/bootstrap-84dc2e9d954b9ea3f6aa3ff9f5b0934f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -74,14 +74,14 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
-  </ul></li>
-  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a>
-  <ul class="collapse">
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
   <li><a href="#model-comparison-and-interpretation" id="toc-model-comparison-and-interpretation" class="nav-link" data-scroll-target="#model-comparison-and-interpretation">Model comparison and interpretation</a></li>
-  <li><a href="#visual-checks-for-interpretability" id="toc-visual-checks-for-interpretability" class="nav-link" data-scroll-target="#visual-checks-for-interpretability">Visual checks for interpretability</a></li>
-  <li><a href="#results-and-discussion" id="toc-results-and-discussion" class="nav-link" data-scroll-target="#results-and-discussion">Results and Discussion</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
+  <li><a href="#results-and-discussion" id="toc-results-and-discussion" class="nav-link" data-scroll-target="#results-and-discussion">Results and Discussion</a>
+  <ul class="collapse">
+  <li><a href="#limitations-and-future-work" id="toc-limitations-and-future-work" class="nav-link" data-scroll-target="#limitations-and-future-work">Limitations and Future Work</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
 </div>
@@ -133,9 +133,9 @@ div.csl-indent {
 <p>The algorithms below are considered for predicting whether if an individual’s income was above 50K/year or not: decision tree, k-nearest neighbors (k-nn), support vector machine with RBF kernel (SVM-RBF), logistic regression, gaussian naive bayes. All variables were used to fit the model, with the exception of: - <code>fnlwgt</code>: useless, since each row has a unique value - <code>education-num</code>: due to redundancy with <code>education</code> - <code>race</code>: for ethical reasons.</p>
 <p>Data was split with 80% into the test set, and 20% into the train set to increase training time due to the vast amount of data. Imputation, one-hot encoding, and ordinal encoding are all done accordingly with details explained below. For model selection, we first conduct 5-fold cross-validation on all the models with default hyperparameters. Then, we select the top two models (Logistic Regression and SVM-RBF) to conduct a random search of hyperparameters with 5-fold cross-validation using accuracy as the classification metric. Finally, we used the best estimators of each to determine their accuracies on unseen test data.</p>
 </section>
-</section>
-<section id="eda" class="level1">
-<h1>EDA</h1>
+<section id="eda" class="level3">
+<h3 class="anchored" data-anchor-id="eda">EDA</h3>
+<p>Let us first try to look at the number of data points we have for each class.</p>
 <div id="fig-class-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-class-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -146,7 +146,9 @@ Figure&nbsp;1: Income class distribution. Counts for <code>&lt;=50K</code> vs <c
 </figcaption>
 </figure>
 </div>
-<p>Here in <a href="#fig-class-dist" class="quarto-xref">Figure&nbsp;1</a>, we see the income class balance to guide feature choices and any class weighting.</p>
+<p>Here in <a href="#fig-class-dist" class="quarto-xref">Figure&nbsp;1</a>, we clearly see there is class imbalance in the data, with more individuals earning &lt;=50K than &gt;50K. This means that a naive classifier that always predicts the majority class would already achieve non-trivial accuracy. Therefore, we must compare our models not just to a 50–50 baseline but also to this majority-class baseline. In future work, we could explore class-weighted loss functions or threshold tuning to better capture the minority high-income group.</p>
+<section id="correlations-and-redundancy" class="level4">
+<h4 class="anchored" data-anchor-id="correlations-and-redundancy">Correlations and Redundancy</h4>
 <div id="fig-corr-heatmap" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-corr-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -157,9 +159,75 @@ Figure&nbsp;2: Features Correlations Heatmap.
 </figcaption>
 </figure>
 </div>
-<p>Here in <a href="#fig-corr-heatmap" class="quarto-xref">Figure&nbsp;2</a>, we see that there are no strong correlations between any pair of features, showing that there might not be collinearity issues.</p>
+<p>In <a href="#fig-corr-heatmap" class="quarto-xref">Figure&nbsp;2</a>, we see that there are no extremely strong correlations between any pair of features, suggesting that severe multicollinearity is unlikely. Some moderate associations exist (e.g., between age and education, or hours worked and income-related variables), but they are not high enough to destabilize models like Logistic Regression. This supports our decision to keep most features, while still considering more advanced dimensionality reduction or feature selection later.</p>
+<p>Taken together, these first checks show a moderate class imbalance and largely mild correlations, so we plan to watch class weighting while keeping most features intact for modeling.</p>
+</section>
+<section id="key-distributions" class="level4">
+<h4 class="anchored" data-anchor-id="key-distributions">Key Distributions</h4>
+<div id="fig-age-density" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-age-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../artifacts/figures/age_density.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-age-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Age distribution (smoothed density). The density view confirms the central mass in mid-career ages.
+</figcaption>
+</figure>
+</div>
+<p>Figure <a href="#fig-age-density" class="quarto-xref">Figure&nbsp;3</a> shows a skew toward mid-career ages, suggesting that experience- and tenure-related features may be informative. We also expect interactions with hours worked and education, since older individuals with higher education might have different income trajectories than younger individuals working similar hours.</p>
+<p>The bulk of observations sit in the prime working ages, so discriminating power may come more from labor variables (hours, occupation) and capital gains than from age alone.</p>
+<div id="fig-edu-freq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-edu-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../artifacts/figures/edu_freq.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-edu-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Education levels. Higher counts appear in high-school/some-college bins; advanced degrees are rarer.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-edu-freq" class="quarto-xref">Figure&nbsp;4</a> highlights that most of the population clusters around mid-tier education levels such as high school and some college. Advanced degrees (e.g., Masters, Doctorate) are relatively rare, which means that their corresponding one-hot encoded levels have few observations. Regularization or grouping of similar education categories can prevent the model from overreacting to these small bins while still capturing the broad effect of education on income. grouping can prevent the model from overreacting to those small bins while still capturing the broad education effect.</p>
+<div id="fig-race-freq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-race-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../artifacts/figures/race_freq.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-race-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Race distribution. Most records fall in the majority category, with smaller minority groups.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-race-freq" class="quarto-xref">Figure&nbsp;5</a> shows class imbalance across race groups, which reinforces the need for careful interpretation of fairness and representation. Even though we chose to exclude race from our predictive models for ethical reasons, this imbalance is important context for understanding the demographic makeup of the dataset and the societal factors behind income disparities.</p>
+<p>This imbalance means any downstream interpretation should consider fairness; we may explore reweighting or sensitivity checks in future work to ensure predictions are not driven by majority representation alone.</p>
+<div id="fig-marital-freq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marital-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../artifacts/figures/marital_status_freq.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marital-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Marital status distribution. Married categories dominate, followed by never-married.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-marital-freq" class="quarto-xref">Figure&nbsp;6</a> suggests marital status may proxy for household stability or earning patterns; for instance, married individuals might have different labor participation or income levels than those who are never married. We expect interactions with occupation, hours worked, and possibly age.</p>
+<p>Marital status can also interact with dependents and life stage; inspecting combined effects will show whether it truly adds signal or just tracks broader demographic patterns.</p>
+<div id="fig-nc-freq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nc-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../artifacts/figures/nc_freq.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nc-freq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Native country counts. The vast majority are from the United States; other countries are sparse.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-nc-freq" class="quarto-xref">Figure&nbsp;7</a> shows heavy sparsity outside the United States, so grouping rare countries into broader regions (e.g., “Other”) could stabilize estimates and reduce noise in the model. Without grouping, many country-level dummy variables would be based on very few observations.</p>
+<p>Overall, the categorical sparsity (education extremes, non-U.S. countries) and demographic skews (race, marital status) argue for careful encoding and potential grouping, while the moderate class imbalance suggests testing class weights during model training.</p>
+</section>
+</section>
 <section id="model-comparison-and-interpretation" class="level3">
 <h3 class="anchored" data-anchor-id="model-comparison-and-interpretation">Model comparison and interpretation</h3>
+<p>From <a href="#tbl-cv-summary" class="quarto-xref">Table&nbsp;1</a>, we can see that RBF-SVM is slightly more accurate than the other models. Logistic Regression is close in accuracy, and its interpretability is better due to its use of linear coefficients that can be mapped to odds ratios. Decision trees and k-NN trail behind in accuracy under the chosen preprocessing and hyperparameter defaults, and Gaussian Naive Bayes performs the worst, likely because its independence assumptions do not hold well for this dataset.</p>
 <div class="cell" data-execution_count="3">
 <div id="tbl-cv-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -167,7 +235,7 @@ Figure&nbsp;2: Features Correlations Heatmap.
 Table&nbsp;1: Cross validation summary for different models.
 </figcaption>
 <div aria-describedby="tbl-cv-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="9">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="6">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 14%">
@@ -251,32 +319,47 @@ Table&nbsp;1: Cross validation summary for different models.
 </figure>
 </div>
 </div>
-<p>From <a href="#tbl-cv-summary" class="quarto-xref">Table&nbsp;1</a>, we can see RBF-SVM is a bit more accurate. Logistic Regression is close in accuracy, and its interpretability is better with its coefficients and odds ratios. So use LR when you need explanations; use SVM if you want the tiny accuracy edge.</p>
+<p>There is also a computational trade-off: SVM-RBF is more expensive to train and tune than Logistic Regression, especially on large datasets with many one-hot encoded features. Thus, the choice between these models depends not only on accuracy but also on interpretability and computational constraints. In many applied settings, Logistic Regression may be a more practical default.</p>
 </section>
-<section id="visual-checks-for-interpretability" class="level3">
-<h3 class="anchored" data-anchor-id="visual-checks-for-interpretability">Visual checks for interpretability</h3>
+</section>
+<section id="results-and-discussion" class="level2">
+<h2 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h2>
+<p>From the analyses above, we discovered that Logistic Regression and SVM-RBF are the best classification models for predicting income among the algorithms we tried. The Logistic Regression model achieves a test accuracy of 0.849, while the SVM-RBF model achieves 0.855. These numbers suggest that non-linear decision boundaries (from SVM-RBF) do help slightly, but a simple linear model is already quite competitive.</p>
+<p>This is somewhat surprising because Logistic Regression is often treated as a baseline model for classification. The fact that it nearly matches the performance of SVM-RBF indicates that much of the predictive structure in the data can be captured with linear relationships in the encoded feature space. It also suggests that careful preprocessing and regularization can make linear models powerful in high-dimensional, mixed-type datasets.</p>
+<p>We also checked for signs of overfitting by comparing cross-validation scores to test performance. The test accuracies are in line with the cross-validation estimates, which indicates that the models generalize reasonably well and that our hyperparameter tuning was not overly optimistic. ### Visual checks for interpretability</p>
+<p><a href="#fig-logreg-coef" class="quarto-xref">Figure&nbsp;8</a> shows the strongest positive and negative Logistic Regression coefficients. From these, we find that key features include capital gains, specific occupations, native countries, and relationship status. For example, large positive coefficients for high capital gains or certain professional occupations suggest strong associations with higher income, while negative coefficients for some part-time or lower-wage jobs suggest an association with the &lt;=50K class.</p>
 <div id="fig-logreg-coef" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-logreg-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../artifacts/figures/log_reg_coefficients.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-logreg-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Top Postive and Negative Logistic Regression Coefficients.
+Figure&nbsp;8: Top Postive and Negative Logistic Regression Coefficients.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-logreg-coef" class="quarto-xref">Figure&nbsp;3</a> show the strongest positive and negative LR coefficients.</p>
+<p>Interpreting these coefficients in terms of odds ratios, a one-unit increase in a positively weighted feature (or belonging to a positively weighted category) multiplies the odds of having income &gt;50K by a factor greater than 1. Conversely, negative coefficients reduce those odds. This kind of interpretation is not directly available with the SVM-RBF model, which is why Logistic Regression remains attractive despite the small performance gap.</p>
+<section id="limitations-and-future-work" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-and-future-work">Limitations and Future Work</h3>
+<p>There are several limitations to our approach:</p>
+<ul>
+<li><p>Predictive vs causal: The models capture associations rather than causal effects. We cannot conclude that changing a single feature (e.g., occupation) in isolation would cause income to change.</p></li>
+<li><p>Feature set: We only used variables available in the Adult dataset. Important factors such as local labor markets, industry trends, or social networks are not included.</p></li>
+<li><p>Fairness considerations: Even though we excluded race, the remaining features may still encode structural inequalities. A thorough fairness analysis (e.g., checking group-specific performance metrics) would be an important next step.</p></li>
+</ul>
+<p>For future work, we should potentially prune irrelevant features to reduce noise and improve robustness. Techniques like recursive feature elimination, regularization path analysis, or dimensionality reduction (PCA or factor analysis) could help identify a more compact feature set (<span class="citation" data-cites="adhithya2025income">Laxman (<a href="#ref-adhithya2025income" role="doc-biblioref">2024</a>)</span>). Grouping rare country categories and carefully handling sparse education levels could also make the model steadier and easier to explain.</p>
+<p>Other ideas include:</p>
+<ul>
+<li><p>Trying additional models such as gradient boosting or random forests.</p></li>
+<li><p>Incorporating class-weighted loss functions to better capture the minority high-income class.</p></li>
+<li><p>Evaluating alternative metrics (precision, recall, F1) specifically for predicting &gt;50K, depending on the application.</p></li>
+</ul>
+<p>Overall, our analysis shows that demographic and employment-related variables can predict income categories with reasonable accuracy, while also highlighting the importance of interpretability, fairness, and careful feature engineering.</p>
 </section>
-<section id="results-and-discussion" class="level3">
-<h3 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h3>
-<p>From the analyses above, we discovered that logistic regression and SVM RBF are the best classification models for predicting income, among all the other classification algorithms. The Logistic Regression achieves validation accuracy of 0.849 and the RBF-SVM achieves validation accuracy of 0.855. This is somewhat surprising because logistic regression is a baseline model for classifications.</p>
-<p>From the logistic regression coefficients, we find that key features include capital gains, occupations, native countries, and relationships, are especially related to determining income levels.</p>
-<p>For our next step, we should potentially prune some other irrelevant features to reduce noise in the models and achieve a better result. We can achieve this analyzing Pearson and Kendall correlation coefficients, PCA, or factor analysis (<span class="citation" data-cites="adhithya2025income">Laxman (<a href="#ref-adhithya2025income" role="doc-biblioref">2024</a>)</span>). Other ideas include grouping rare country categories to make the model steadier and easier to explain.</p>
 </section>
-<section id="references" class="level2 unnumbered">
+<section id="references" class="level1 unnumbered">
 
 
-</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
