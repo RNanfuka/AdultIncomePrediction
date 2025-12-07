@@ -13,9 +13,11 @@ RUN apt-get update && apt-get install -y make curl
 
 # 2. Download and install the specific ARM64 .deb file
 # (We use version 1.8.26 here, but you can update the URL to a newer version later)
-RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.8.26/quarto-1.8.26-linux-arm64.deb \
-    && dpkg -i quarto-1.8.26-linux-arm64.deb \
-    && rm quarto-1.8.26-linux-arm64.deb
+RUN ARCH=$(dpkg --print-architecture) && \
+    echo "Detected architecture: $ARCH" && \
+    curl -LO "https://github.com/quarto-dev/quarto-cli/releases/download/v1.8.26/quarto-1.8.26-linux-${ARCH}.deb" && \
+    dpkg -i "quarto-1.8.26-linux-${ARCH}.deb" && \
+    rm "quarto-1.8.26-linux-${ARCH}.deb"
 
 # expose JupyterLab port
 EXPOSE 8888
