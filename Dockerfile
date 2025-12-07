@@ -13,7 +13,7 @@ EXPOSE 8888
 
 # sets the default working directory
 # this is also specified in the compose file
-WORKDIR /workplace
+WORKDIR /workspace
 
 # run JupyterLab on container start
 # uses the jupyterlab from the install environment

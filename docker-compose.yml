@@ -1,9 +1,6 @@
 services:
   522-milestone:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: 522-milestone
+    image: rnanfuka/docker-condalock-jupyterlab:latest
     container_name: 522-milestone
     ports:
       - "8878:8888"
