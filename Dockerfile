@@ -23,7 +23,7 @@ EXPOSE 8888
 
 # sets the default working directory
 # this is also specified in the compose file
-WORKDIR /workplace
+WORKDIR /workspace
 
 # Append the hook to .bashrc so every new Jupyter terminal gets it automatically
 RUN echo 'eval "$(/opt/conda/bin/conda shell.bash hook)"' >> ~/.bashrc

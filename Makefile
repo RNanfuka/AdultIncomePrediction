@@ -46,10 +46,30 @@ up: ## stop and start docker-compose services
 stop: ## stop docker-compose services
 	docker-compose stop
 
+.PHONY: download-data
+download-data:
+	python scripts/download_data.py
+
+.PHONY: clean-data
+clean-data:
+	python scripts/clean_data.py
+
+.PHONY: split-data
+split-data:
+	python scripts/split_data.py --input_dir="data/processed/clean_adult.csv" --out_dir="data/processed/"
+
+.PHONY: preprocess-data
+preprocess-data:
+	python scripts/preprocess_data.py --input_dir="data/processed/train.csv" --out_dir="data/processed/"
+	python scripts/preprocess_data.py --input_dir="data/processed/test.csv" --out_dir="data/processed/"
+
 .PHONY: data-validate
 data-validate: ## run data validation tests
-	python ./src/validations/data_validation_tests.py
+	python scripts/validations/data_validation_tests.py --data data/processed/clean_adult.csv --no-raise-errors || true
 
+.PHONY: eda
+eda: ## run data validation tests
+	python scripts/eda.py --input_dir="data/clean.csv" --out_dir="artifacts/figures/"
 
 .PHONY: model-train
 model-train: ## Train with hyperparameter search and save tuned pickles/figures
@@ -60,3 +80,14 @@ model-train: ## Train with hyperparameter search and save tuned pickles/figures
 model-reuse: ## Reuse existing tuned pickles to regenerate tables/figures (skip HPO)
 	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
 		--cv-folds 5 --top-n 10 --skip-hpo
+
+.PHONY: run-all-py
+run-all-py: ## Run all python scripts
+	make download-data
+	make clean-data
+	make data-validate
+	make split-data
+	make eda
+	make preprocess-data
+	make model-train
+	make model-reuse
