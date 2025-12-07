@@ -3,12 +3,15 @@ channels:
   - conda-forge
 dependencies:
   - ucimlrepo
+  - click
   - numpy
   - scikit-learn
   - python
   - pandas
+  - click
   - ipykernel
   - matplotlib
+  - requests
   - pandera
   - click
   - pip

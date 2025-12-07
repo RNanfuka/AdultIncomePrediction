@@ -49,3 +49,14 @@ stop: ## stop docker-compose services
 .PHONY: data-validate
 data-validate: ## run data validation tests
 	python ./src/validations/data_validation_tests.py
+
+
+.PHONY: model-train
+model-train: ## Train with hyperparameter search and save tuned pickles/figures
+	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
+		--cv-folds 5 --top-n 10 --log-reg-iter 50 --svm-iter 30
+
+.PHONY: model-reuse
+model-reuse: ## Reuse existing tuned pickles to regenerate tables/figures (skip HPO)
+	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
+		--cv-folds 5 --top-n 10 --skip-hpo
