@@ -60,3 +60,9 @@ model-train: ## Train with hyperparameter search and save tuned pickles/figures
 model-reuse: ## Reuse existing tuned pickles to regenerate tables/figures (skip HPO)
 	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
 		--cv-folds 5 --top-n 10 --skip-hpo
+
+.PHONY: run-all-py
+run-all-py: ## Run all python scripts
+	make data-validate
+	make model-reuse
+	make model-train
