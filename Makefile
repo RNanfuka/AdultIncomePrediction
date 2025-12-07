@@ -13,14 +13,13 @@ all: ## runs the targets: cl, env, build
 
 .PHONY: cl
 cl: ## create conda lock for multiple platforms
-	# the linux-aarch64 is used for ARM Macs using linux docker container
+	# the linux-aarch64 is used for ARM Macs using linux docker container, but not compatible with quarto
 	conda-lock lock \
 		--file environment.yml \
 		-p linux-64 \
 		-p osx-64 \
 		-p osx-arm64 \
-		-p win-64 \
-		-p linux-aarch64
+		-p win-64
 
 .PHONY: env
 env: ## remove previous and create environment from lock file
