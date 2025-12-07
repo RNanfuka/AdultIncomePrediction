@@ -47,17 +47,55 @@ The algorithms below are considered for predicting whether if an individual's in
 
 Data was split with 80% into the test set, and 20% into the train set to increase training time due to the vast amount of data. Imputation, one-hot encoding, and ordinal encoding are all done accordingly with details explained below. For model selection, we first conduct 5-fold cross-validation on all the models with default hyperparameters. Then, we select the top two models (Logistic Regression and SVM-RBF) to conduct a random search of hyperparameters with 5-fold cross-validation using accuracy as the classification metric. Finally, we used the best estimators of each to determine their accuracies on unseen test data.
 
-# EDA
+### EDA
+
+Let us first try to look at the number of data points we have for each class.
 
 ![Income class distribution. Counts for `<=50K` vs `>50K` show the class mix before modeling.](../artifacts/figures/pred_class_dist.png){#fig-class-dist width="80%"}
 
-Here in @fig-class-dist, we see the income class balance to guide feature choices and any class weighting.
+Here in @fig-class-dist, we clearly see there is class imbalance in the data, with more individuals earning <=50K than >50K. This means that a naive classifier that always predicts the majority class would already achieve non-trivial accuracy. Therefore, we must compare our models not just to a 50–50 baseline but also to this majority-class baseline. In future work, we could explore class-weighted loss functions or threshold tuning to better capture the minority high-income group.
+
+#### Correlations and Redundancy
 
 ![Features Correlations Heatmap.](../artifacts/figures/corr_heatmap.png){#fig-corr-heatmap width="80%"}
 
-Here in @fig-corr-heatmap, we see that there are no strong correlations between any pair of features, showing that there might not be collinearity issues.
+In @fig-corr-heatmap, we see that there are no extremely strong correlations between any pair of features, suggesting that severe multicollinearity is unlikely. Some moderate associations exist (e.g., between age and education, or hours worked and income-related variables), but they are not high enough to destabilize models like Logistic Regression. This supports our decision to keep most features, while still considering more advanced dimensionality reduction or feature selection later.
 
-### Model comparison and interpretation
+Taken together, these first checks show a moderate class imbalance and largely mild correlations, so we plan to watch class weighting while keeping most features intact for modeling.
+
+#### Key Distributions
+
+![Age distribution (smoothed density). The density view confirms the central mass in mid-career ages.](../artifacts/figures/age_density.png){#fig-age-density width="80%"}
+
+Figure @fig-age-density shows a skew toward mid-career ages, suggesting that experience- and tenure-related features may be informative. We also expect interactions with hours worked and education, since older individuals with higher education might have different income trajectories than younger individuals working similar hours.
+
+The bulk of observations sit in the prime working ages, so discriminating power may come more from labor variables (hours, occupation) and capital gains than from age alone.
+
+![Education levels. Higher counts appear in high-school/some-college bins; advanced degrees are rarer.](../artifacts/figures/edu_freq.png){#fig-edu-freq width="80%"}
+
+@fig-edu-freq highlights that most of the population clusters around mid-tier education levels such as high school and some college. Advanced degrees (e.g., Masters, Doctorate) are relatively rare, which means that their corresponding one-hot encoded levels have few observations. Regularization or grouping of similar education categories can prevent the model from overreacting to these small bins while still capturing the broad effect of education on income. grouping can prevent the model from overreacting to those small bins while still capturing the broad education effect.
+
+![Race distribution. Most records fall in the majority category, with smaller minority groups.](../artifacts/figures/race_freq.png){#fig-race-freq width="80%"}
+
+@fig-race-freq shows class imbalance across race groups, which reinforces the need for careful interpretation of fairness and representation. Even though we chose to exclude race from our predictive models for ethical reasons, this imbalance is important context for understanding the demographic makeup of the dataset and the societal factors behind income disparities.
+
+This imbalance means any downstream interpretation should consider fairness; we may explore reweighting or sensitivity checks in future work to ensure predictions are not driven by majority representation alone.
+
+![Marital status distribution. Married categories dominate, followed by never-married.](../artifacts/figures/marital_status_freq.png){#fig-marital-freq width="80%"}
+
+@fig-marital-freq suggests marital status may proxy for household stability or earning patterns; for instance, married individuals might have different labor participation or income levels than those who are never married. We expect interactions with occupation, hours worked, and possibly age.
+
+Marital status can also interact with dependents and life stage; inspecting combined effects will show whether it truly adds signal or just tracks broader demographic patterns.
+
+![Native country counts. The vast majority are from the United States; other countries are sparse.](../artifacts/figures/nc_freq.png){#fig-nc-freq width="80%"}
+
+@fig-nc-freq shows heavy sparsity outside the United States, so grouping rare countries into broader regions (e.g., "Other") could stabilize estimates and reduce noise in the model. Without grouping, many country-level dummy variables would be based on very few observations.
+
+Overall, the categorical sparsity (education extremes, non-U.S. countries) and demographic skews (race, marital status) argue for careful encoding and potential grouping, while the moderate class imbalance suggests testing class weights during model training.
+
+### Model comparison and interpretation 
+
+From @tbl-cv-summary, we can see that RBF-SVM is slightly more accurate than the other models. Logistic Regression is close in accuracy, and its interpretability is better due to its use of linear coefficients that can be mapped to odds ratios. Decision trees and k-NN trail behind in accuracy under the chosen preprocessing and hyperparameter defaults, and Gaussian Naive Bayes performs the worst, likely because its independence assumptions do not hold well for this dataset.
 
 ```{python}
 #| label: tbl-cv-summary
@@ -66,20 +104,43 @@ cv_summary = cv_summary.reset_index()
 Markdown(cv_summary.to_markdown(index = False))
 ```
 
-From @tbl-cv-summary, we can see RBF-SVM is a bit more accurate. Logistic Regression is close in accuracy, and its interpretability is better with its coefficients and odds ratios. So use LR when you need explanations; use SVM if you want the tiny accuracy edge.
+There is also a computational trade-off: SVM-RBF is more expensive to train and tune than Logistic Regression, especially on large datasets with many one-hot encoded features. Thus, the choice between these models depends not only on accuracy but also on interpretability and computational constraints. In many applied settings, Logistic Regression may be a more practical default.
 
+## Results and Discussion
+
+From the analyses above, we discovered that Logistic Regression and SVM-RBF are the best classification models for predicting income among the algorithms we tried. The Logistic Regression model achieves a test accuracy of `{python} lr_accuracy`, while the SVM-RBF model achieves `{python} rbf_accuracy`. These numbers suggest that non-linear decision boundaries (from SVM-RBF) do help slightly, but a simple linear model is already quite competitive.
+
+This is somewhat surprising because Logistic Regression is often treated as a baseline model for classification. The fact that it nearly matches the performance of SVM-RBF indicates that much of the predictive structure in the data can be captured with linear relationships in the encoded feature space. It also suggests that careful preprocessing and regularization can make linear models powerful in high-dimensional, mixed-type datasets.
+
+We also checked for signs of overfitting by comparing cross-validation scores to test performance. The test accuracies are in line with the cross-validation estimates, which indicates that the models generalize reasonably well and that our hyperparameter tuning was not overly optimistic.
 ### Visual checks for interpretability
+
+@fig-logreg-coef shows the strongest positive and negative Logistic Regression coefficients. From these, we find that key features include capital gains, specific occupations, native countries, and relationship status. For example, large positive coefficients for high capital gains or certain professional occupations suggest strong associations with higher income, while negative coefficients for some part-time or lower-wage jobs suggest an association with the <=50K class.
 
 ![Top Postive and Negative Logistic Regression Coefficients.](../artifacts/figures/log_reg_coefficients.png){#fig-logreg-coef width="80%"}
 
-@fig-logreg-coef show the strongest positive and negative LR coefficients.
+Interpreting these coefficients in terms of odds ratios, a one-unit increase in a positively weighted feature (or belonging to a positively weighted category) multiplies the odds of having income >50K by a factor greater than 1. Conversely, negative coefficients reduce those odds. This kind of interpretation is not directly available with the SVM-RBF model, which is why Logistic Regression remains attractive despite the small performance gap.
 
-### Results and Discussion
+### Limitations and Future Work
 
-From the analyses above, we discovered that logistic regression and SVM RBF are the best classification models for predicting income, among all the other classification algorithms. The Logistic Regression achieves validation accuracy of `{python} lr_accuracy` and the RBF-SVM achieves validation accuracy of `{python} rbf_accuracy`. This is somewhat surprising because logistic regression is a baseline model for classifications.
+There are several limitations to our approach:
 
-From the logistic regression coefficients, we find that key features include capital gains, occupations, native countries, and relationships, are especially related to determining income levels.
+- Predictive vs causal: The models capture associations rather than causal effects. We cannot conclude that changing a single feature (e.g., occupation) in isolation would cause income to change.
 
-For our next step, we should potentially prune some other irrelevant features to reduce noise in the models and achieve a better result. We can achieve this analyzing Pearson and Kendall correlation coefficients, PCA, or factor analysis (@adhithya2025income). Other ideas include grouping rare country categories to make the model steadier and easier to explain.
+- Feature set: We only used variables available in the Adult dataset. Important factors such as local labor markets, industry trends, or social networks are not included.
 
-## References
+- Fairness considerations: Even though we excluded race, the remaining features may still encode structural inequalities. A thorough fairness analysis (e.g., checking group-specific performance metrics) would be an important next step.
+
+For future work, we should potentially prune irrelevant features to reduce noise and improve robustness. Techniques like recursive feature elimination, regularization path analysis, or dimensionality reduction (PCA or factor analysis) could help identify a more compact feature set (@adhithya2025income). Grouping rare country categories and carefully handling sparse education levels could also make the model steadier and easier to explain.
+
+Other ideas include:
+
+- Trying additional models such as gradient boosting or random forests.
+
+- Incorporating class-weighted loss functions to better capture the minority high-income class.
+
+- Evaluating alternative metrics (precision, recall, F1) specifically for predicting >50K, depending on the application.
+
+Overall, our analysis shows that demographic and employment-related variables can predict income categories with reasonable accuracy, while also highlighting the importance of interpretability, fairness, and careful feature engineering.
+
+# References
