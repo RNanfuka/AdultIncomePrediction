@@ -15,7 +15,6 @@ dependencies:
   - nbformat=5.10.4 
   - requests=2.32.5
   - pandera=0.27.0
-  - quarto=1.8.26 # Remove this if you are building conda environment locally
   - tabulate=0.9.0
   - jupyter=1.1.1
   - pyyaml=6.0.3 
