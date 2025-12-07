@@ -49,6 +49,14 @@ stop: ## stop docker-compose services
 data-validate: ## run data validation tests
 	python ./src/validations/data_validation_tests.py
 
+.PHONY: download-data
+download-data: ## download raw data
+	python scripts/download_data.py
+
+.PHONY: clean-data
+clean-data: ## clean data for modeling
+	python scripts/clean_data.py
+
 
 .PHONY: model-train
 model-train: ## Train with hyperparameter search and save tuned pickles/figures
