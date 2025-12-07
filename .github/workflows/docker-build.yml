@@ -6,6 +6,7 @@ on:
     paths:
       - 'environment.yml'
       - 'Dockerfile'
+      - 'Makefile'
       - 'conda-lock.yml'
       - '.github/workflows/docker-build.yml'
   # also allow manual trigger

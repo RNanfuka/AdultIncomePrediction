@@ -13,7 +13,7 @@ all: ## runs the targets: cl, env, build
 
 .PHONY: cl
 cl: ## create conda lock for multiple platforms
-	# the linux-aarch64 is used for ARM Macs using linux docker container, but not compatible with quarto
+	# the linux-aarch64 is used for ARM Macs using linux docker container, but not compatible with quarto.
 	conda-lock lock \
 		--file environment.yml \
 		-p linux-64 \
