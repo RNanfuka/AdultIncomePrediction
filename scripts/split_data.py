@@ -6,9 +6,9 @@ from sklearn.model_selection import train_test_split # Clean labels and split ea
 @click.command()
 @click.option('--input_dir', required=True, help='Path (including filename) to raw data')
 @click.option('--train_out_dir', required=True, help='Path to directory where the train data should be saved')
-@click.option('--test_out_dir', required=True, help='Path to directory where the testdata should be saved')
+@click.option('--test_out_dir', required=True, help='Path to directory where the test data should be saved')
 
-def main(input_dir, train_out_dir,test_out_dir):
+def main(input_dir, train_out_dir, test_out_dir):
     #Input
     adult_df = pd.read_csv(input_dir)
 
@@ -21,14 +21,16 @@ def main(input_dir, train_out_dir,test_out_dir):
         stratify = adult_df['income']
     )
 
-    drop_features = ['fnlwgt', 'education-num', 'race']
-    target = "income"
-
     # Use training slice for EDA to avoid peeking at test data
     adult_df = data_train.reset_index(drop=True)
     data_test = data_test.reset_index(drop=True)
 
-    X_train = adult_df.drop(columns = drop_features + [target])
-    X_test = data_test.drop(columns = drop_features + [target])
-    y_train = adult_df[target]
-    y_test = data_test[target]
+    #Output 
+    adult_df.to_csv(train_out_dir + "train.csv", index=False) 
+    
+    data_test.to_csv(test_out_dir + "test.csv", index=False)
+
+if __name__ == '__main__':
+    main()
+
+
