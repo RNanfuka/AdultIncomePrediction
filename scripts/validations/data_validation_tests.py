@@ -26,7 +26,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Validate dataset correlations with pandera.")
     parser.add_argument(
         "--data",
-        default="data/adult.csv",
+        default="data/raw/adult.csv",
         help="Path to CSV file to validate (default: data/adult.csv)",
     )
     parser.add_argument(
