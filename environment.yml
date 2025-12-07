@@ -18,8 +18,8 @@ dependencies:
   - jupyter=1.1.1
   - pip=25.3
   - pip:
-    - vegafusion=2.0.3
-    - altair=6.0.0
+    - vegafusion
+    - altair
     - vl-convert-python
     - pyarrow
 
