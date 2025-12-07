@@ -24,7 +24,7 @@ cl: ## create conda lock for multiple platforms
 .PHONY: env
 env: ## remove previous and create environment from lock file
 	# remove the existing env, and ignore if missing
-	conda env remove -n 522-milestone || true
+	conda env remove -n 522-milestone -y || true
 	conda-lock install -n 522-milestone conda-lock.yml
 
 .PHONY: build
