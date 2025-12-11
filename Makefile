@@ -1,5 +1,17 @@
 .DEFAULT_GOAL := help
 
+docs/index.html: reports/income-prediction.qmd artifacts/figures/pred_class_dist.png artifacts/figures/corr_heatmap.png artifacts/figures/age_density.png artifacts/figures/edu_freq.png artifacts/figures/race_freq.png artifacts/figures/marital_status_freq.png artifacts/figures/nc_freq.png artifacts/figures/log_reg_coefficients.png artifacts/tables/cv_summary.csv
+	quarto render reports/income-prediction.qmd --output index.html
+
+data/raw/adult.csv: scripts/download_data.py
+	python scripts/download_data.py --write_to data/raw --target-name adult.csv
+data/processed/clean_adult.csv: scripts/clean_data.py data/raw/adult.csv
+	python scripts/clean_data.py --input-path data/raw/adult.csv --output-path data/processed/clean_adult.csv
+
+cv_summary.csv log_reg_coefficients.csv hpo_results.csv cv_summary.png log_reg_coefficients.png cv_summary_table.png log_reg_coefficients_table.png hpo_results_table.png: scripts/modeling.py processed/preprocessed_train.csv
+	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
+        --cv-folds 5 --top-n 10 --log-reg-iter 50 --svm-iter 30
+
 .PHONY: help
 help: ## Show this help message
 	@echo "Available commands:"
