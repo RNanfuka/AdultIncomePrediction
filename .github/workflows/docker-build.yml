@@ -41,7 +41,7 @@ jobs:
 
       - name: Run conda-lock
         shell: "bash -l {0}"
-        run: make cl
+        run: make cl-linux
 
       # checks if the conda-linux-64.lock file has any changes
       - name: Check for changes
@@ -99,7 +99,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/docker-condalock-jupyterlab:latest
