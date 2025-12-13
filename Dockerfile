@@ -42,7 +42,7 @@ RUN printf '%s\n' \
 'eval "$(/opt/conda/bin/conda shell.bash hook)"' \
 'if [ "$SERVICE" = "quarto" ]; then' \
 '  echo "🚀 Starting Quarto preview on port 8889..."' \
-'  ç' \
+'  quarto preview --port 8889 --host 0.0.0.0 --no-browser' \
 'else' \
 '  echo "🚀 Starting JupyterLab on port 8888..."' \
 '  conda run --no-capture-output -n 522-milestone jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --IdentityProvider.token= --ServerApp.password=' \

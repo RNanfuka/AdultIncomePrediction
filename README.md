@@ -88,9 +88,27 @@ docker exec -it 522-milestone bash -lc 'eval "$(/opt/conda/bin/conda shell.bash 
 
 After `make all` completes, the rendered report will be available at: <http://localhost:8889/>
 
+Alternatively, you can try running it on your local machine without Docker.
+
+```bash
+# 1) Create the conda environment from the lock file
+make env
+
+# 2) Activate the environment 
+conda activate 522-milestone
+
+# 3) Run the full analysis pipeline and render the report
+make all
+
+# 4) Run quarto preview to view the report locally
+quarto preview --port 8889 --host 0.0.0.0 --no-browser
+```
+
+After `make all` completes, the rendered report will be available at: <http://localhost:8889/>
+
 ---
 
-## How to run (detailed)
+## How to run individual steps in detail
 
 ### Build the image
 
