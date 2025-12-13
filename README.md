@@ -71,13 +71,9 @@ All Python dependencies are declared in **[`environment.yml`](environment.yml)**
 
 ```bash
 # 1) Clone the repository
-git clone <repo-url> IncomePrediction
-cd IncomePrediction
+git clone <repo-url> AdultIncomePrediction
+cd AdultIncomePrediction
 
-# 2) Build the Docker image
-make build
-# or equivalently:
-# docker build -t 522-milestone -f Dockerfile .
 
 # 3) Start the container
 make up
@@ -89,6 +85,8 @@ docker exec -it 522-milestone bash -lc 'eval "$(/opt/conda/bin/conda shell.bash 
 ```
 
 After `make all` completes, the rendered report will be available at: <http://localhost:8889/>
+
+Note: If you are running it for the first time, the Docker pull and the hyperparameter tuning may take some time.
 
 Alternatively, you can try running it on your local machine without Docker.
 
@@ -145,6 +143,11 @@ Open an interactive shell:
 
 ```bash
 docker exec -it 522-milestone bash
+````
+
+Then activate the Conda environment:
+
+```bash
 conda activate 522-milestone
 ```
 

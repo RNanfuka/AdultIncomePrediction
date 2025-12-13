@@ -1,9 +1,7 @@
 services:
   522-milestone:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: 522-milestone
+    image: rnanfuka/docker-condalock-jupyterlab:yonas.fix-reproducibility
+    platform: linux/amd64
     container_name: 522-milestone
     ports:
       - "8889:8889"
