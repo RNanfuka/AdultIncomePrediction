@@ -36,7 +36,7 @@ No one should ever be treated negatively for asking questions or raising concern
 
 ## Enforcement 
 
-Instances of abusive, harassing, or otherwise unacceptable behaviour can be brought forward by speaking to a teammate you trust or by contacting the TA or instructor. Any concern raised will be reviewed and handled in a way that is fair, respectful, and appropriate to the situation. We will maintain confidentiality whenever possible and approach each report with care and discretion. If a team member does not follow or uphold this Code in good faith, steps may be taken to address the issue, which may include discussions, adjustments to responsibilities, or escalation to the course team.
+Instances of abusive, harassing, or otherwise unacceptable behaviour can be brought forward by emailing Alan at alnliu11@student.ubc.ca or by contacting the TA or instructor. Any concern raised will be reviewed and handled in a way that is fair, respectful, and appropriate to the situation. We will maintain confidentiality whenever possible and approach each report with care and discretion. If a team member does not follow or uphold this Code in good faith, steps may be taken to address the issue, which may include discussions, adjustments to responsibilities, or escalation to the course team.
 
 Our aim is always to restore a safe and collaborative working environment.
 
