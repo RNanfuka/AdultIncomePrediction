@@ -6,9 +6,11 @@ services:
     image: 522-milestone
     container_name: 522-milestone
     ports:
-      - "8877:8888"
+      - "8889:8889"
     volumes:
       - ./:/workspace
     working_dir: /workspace
     stdin_open: true
     tty: true
+    environment:
+      - SERVICE=quarto

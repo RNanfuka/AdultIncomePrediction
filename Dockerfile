@@ -20,16 +20,35 @@ RUN ARCH="$(dpkg --print-architecture)" \
     && dpkg -i "quarto-${QUARTO_VERSION}-linux-${ARCH}.deb" \
     && rm "quarto-${QUARTO_VERSION}-linux-${ARCH}.deb"
 
-# expose JupyterLab port
-EXPOSE 8888
-
+# Expose ports
+EXPOSE 8888 
+EXPOSE 8889
 # sets the default working directory
 # this is also specified in the compose file
 WORKDIR /workspace
 
-# Append the hook to .bashrc so every new Jupyter terminal gets it automatically
+# Ensure conda is initialized in terminals
 RUN echo 'eval "$(/opt/conda/bin/conda shell.bash hook)"' >> ~/.bashrc
 
-# run JupyterLab on container start
-# uses the jupyterlab from the install environment
-CMD ["conda", "run", "--no-capture-output", "-n", "522-milestone", "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--IdentityProvider.token=''", "--ServerApp.password=''"]
+# Environment variable to control which service runs
+# Options: "jupyter" OR "quarto"
+ENV SERVICE=jupyter
+
+# Script that chooses which service to run
+# (Installed into the container as /entrypoint.sh)
+RUN printf '%s\n' \
+'#!/bin/bash' \
+'set -e' \
+'eval "$(/opt/conda/bin/conda shell.bash hook)"' \
+'if [ "$SERVICE" = "quarto" ]; then' \
+'  echo "🚀 Starting Quarto preview on port 8889..."' \
+'  ç' \
+'else' \
+'  echo "🚀 Starting JupyterLab on port 8888..."' \
+'  conda run --no-capture-output -n 522-milestone jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --IdentityProvider.token= --ServerApp.password=' \
+'fi' \
+> /entrypoint.sh \
+    && chmod +x /entrypoint.sh
+
+# Use the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
