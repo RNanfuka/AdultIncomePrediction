@@ -2945,7 +2945,7 @@ package:
   category: main
   optional: false
 - name: fonttools
-  version: 4.61.0
+  version: 4.61.1
   manager: conda
   platform: linux-64
   dependencies:
@@ -2955,14 +2955,14 @@ package:
     munkres: ''
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/fonttools-4.61.0-py313h3dea7bd_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/fonttools-4.61.1-py313h3dea7bd_0.conda
   hash:
-    md5: 92f09729a821c52943d4b0b3749a2380
-    sha256: edea7e66bb068551cab49335776e26e4003af3acec78d643d7142cd39a8db670
+    md5: c0f36dfbb130da4f6ce2df31f6b25ea8
+    sha256: 97f225199e6e5dfb93f551087c0951fee92db2d29a9dcb6a0346d66bff06fea4
   category: main
   optional: false
 - name: fonttools
-  version: 4.61.0
+  version: 4.61.1
   manager: conda
   platform: linux-aarch64
   dependencies:
@@ -2971,14 +2971,14 @@ package:
     munkres: ''
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-aarch64/fonttools-4.61.0-py313hd3a54cf_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-aarch64/fonttools-4.61.1-py313hd3a54cf_0.conda
   hash:
-    md5: 919d48c0da7609f5046aebee2ed6a02b
-    sha256: f223b8d4dc7256bc5142127b8de7738be478d7f5e5eee3047be43660f287ce7c
+    md5: fc08ffb962c253e033fda3188421be89
+    sha256: b1fc9ce92b6a23e97d7681d8641c3005e45b360ec6bd32e1dec0f95d78a09b32
   category: main
   optional: false
 - name: fonttools
-  version: 4.61.0
+  version: 4.61.1
   manager: conda
   platform: osx-64
   dependencies:
@@ -2987,14 +2987,14 @@ package:
     munkres: ''
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/osx-64/fonttools-4.61.0-py313h0f4d31d_0.conda
+  url: https://conda.anaconda.org/conda-forge/osx-64/fonttools-4.61.1-py313h0f4d31d_0.conda
   hash:
-    md5: dd076c6d09a3e9b602373ba0b0cf720d
-    sha256: b7b5024bb48801cb62df35ab97a560c1e1d40411b7680461250df3b35843bc11
+    md5: 77978c974cba250d6ee95a4c29aad08e
+    sha256: 5375b893af274c09b265e65af8ff49016e0d23c8e03509d830be09eda46585e9
   category: main
   optional: false
 - name: fonttools
-  version: 4.61.0
+  version: 4.61.1
   manager: conda
   platform: osx-arm64
   dependencies:
@@ -3003,14 +3003,14 @@ package:
     munkres: ''
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/fonttools-4.61.0-py313h7d74516_0.conda
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/fonttools-4.61.1-py313h7d74516_0.conda
   hash:
-    md5: 4c69b2b96797e459051f24ae70d22220
-    sha256: 08aead4f8aefebbb079e2ce3325a77622972b5920adf4886730811ad9ea404ce
+    md5: 894eb0c3e9a17643906a6da3209bf045
+    sha256: 52d4aacd7c154adff1f0e86609bf1b0e63b7049c947c4df1e78eedb9f2913091
   category: main
   optional: false
 - name: fonttools
-  version: 4.61.0
+  version: 4.61.1
   manager: conda
   platform: win-64
   dependencies:
@@ -3021,10 +3021,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.3,<15'
     vc14_runtime: '>=14.44.35208'
-  url: https://conda.anaconda.org/conda-forge/win-64/fonttools-4.61.0-py313hd650c13_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/fonttools-4.61.1-py313hd650c13_0.conda
   hash:
-    md5: 9685716b38f2e59fd0fb8ed554bda89a
-    sha256: e8e8109fc884f15f2b1ccb36fa8521326e207c3139ca1584d91d7e7b20a081d6
+    md5: c6fbf3a96192c26a75ed5755bd904fea
+    sha256: da82b8e843103bf4aaab470e4b8025286357dc8c34cd47817350dcb14ad307fb
   category: main
   optional: false
 - name: fqdn
