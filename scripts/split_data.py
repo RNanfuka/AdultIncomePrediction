@@ -16,8 +16,7 @@ def main(input_dir, out_dir):
     data_train, data_test = train_test_split(
         adult_df,
         test_size = 0.8,
-        random_state = 42,
-        stratify = adult_df['income']
+        random_state = 42
     )
 
     # Use training slice for EDA to avoid peeking at test data

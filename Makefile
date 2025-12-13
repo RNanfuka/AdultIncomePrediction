@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := help
 
+.PHONY: report
+report: docs/index.html
+
 docs/index.html: reports/income-prediction.qmd artifacts/figures/pred_class_dist.png artifacts/figures/corr_heatmap.png artifacts/figures/age_density.png artifacts/figures/edu_freq.png artifacts/figures/race_freq.png artifacts/figures/marital_status_freq.png artifacts/figures/nc_freq.png artifacts/figures/log_reg_coefficients.png artifacts/tables/cv_summary.csv
 	quarto render reports/income-prediction.qmd --output index.html
 
@@ -8,9 +11,37 @@ data/raw/adult.csv: scripts/download_data.py
 data/processed/clean_adult.csv: scripts/clean_data.py data/raw/adult.csv
 	python scripts/clean_data.py --input-path data/raw/adult.csv --output-path data/processed/clean_adult.csv
 
-cv_summary.csv log_reg_coefficients.csv hpo_results.csv cv_summary.png log_reg_coefficients.png cv_summary_table.png log_reg_coefficients_table.png hpo_results_table.png: scripts/modeling.py processed/preprocessed_train.csv
+artifacts/tables/cv_summary.csv \
+artifacts/tables/log_reg_coefficients.csv \
+artifacts/tables/hpo_results.csv \
+artifacts/figures/cv_summary.png \
+artifacts/figures/log_reg_coefficients.png \
+artifacts/figures/cv_summary_table.png \
+artifacts/figures/log_reg_coefficients_table.png \
+artifacts/figures/hpo_results_table.png: \
+scripts/modeling.py \
+data/processed/preprocessed_train.csv
 	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
         --cv-folds 5 --top-n 10 --log-reg-iter 50 --svm-iter 30
+
+data/processed/train.csv data/processed/test.csv: scripts/split_data.py data/processed/clean_adult.csv
+	python scripts/split_data.py --input_dir="data/processed/clean_adult.csv" --out_dir="data/processed/"
+
+data/processed/preprocessed_test.csv: scripts/preprocess_data.py data/processed/test.csv
+	python scripts/preprocess_data.py --input_dir="data/processed/test.csv" --out_dir="data/processed/"
+
+data/processed/preprocessed_train.csv: scripts/preprocess_data.py data/processed/train.csv
+	python scripts/preprocess_data.py --input_dir="data/processed/train.csv" --out_dir="data/processed/"
+
+artifacts/figures/age_hist.png artifacts/figures/age_density.png artifacts/figures/marital_status_freq.png artifacts/figures/race_freq.png artifacts/figures/wc_freq.png artifacts/figures/edu_freq.png artifacts/figures/nc_freq.png artifacts/figures/corr_heatmap.png artifacts/figures/pred_class_dist.png: scripts/eda.py data/processed/clean_adult.csv
+	python scripts/eda.py --input_dir="data/processed/clean_adult.csv" --out_dir="artifacts/figures/"
+
+.PHONY: clean
+clean: # clean the directory
+	rm -rf data/processed
+	rm -rf artifacts/figures
+	mkdir -p artifacts/figures
+
 
 .PHONY: help
 help: ## Show this help message
