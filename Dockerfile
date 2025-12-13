@@ -9,13 +9,16 @@ RUN conda install -n base -c conda-forge conda-lock jupyterlab nb_conda_kernels 
 RUN conda-lock install -n 522-milestone conda-lock.yml
 
 # Install system utilities (Make, Curl, etc.)
-RUN apt-get update && apt-get install -y make curl
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends make curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# 2. Download and install the specific ARM64 .deb file
-# (We use version 1.8.26 here, but you can update the URL to a newer version later)
-RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.8.26/quarto-1.8.26-linux-arm64.deb \
-    && dpkg -i quarto-1.8.26-linux-arm64.deb \
-    && rm quarto-1.8.26-linux-arm64.deb
+# Download and install Quarto matching the container architecture (amd64/arm64)
+ARG QUARTO_VERSION=1.8.26
+RUN ARCH="$(dpkg --print-architecture)" \
+    && curl -LO "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-${ARCH}.deb" \
+    && dpkg -i "quarto-${QUARTO_VERSION}-linux-${ARCH}.deb" \
+    && rm "quarto-${QUARTO_VERSION}-linux-${ARCH}.deb"
 
 # expose JupyterLab port
 EXPOSE 8888
