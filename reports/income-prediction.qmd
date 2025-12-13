@@ -131,7 +131,7 @@ There are several limitations to our approach:
 
 - Fairness considerations: Even though we excluded race, the remaining features may still encode structural inequalities. A thorough fairness analysis (e.g., checking group-specific performance metrics) would be an important next step.
 
-For future work, we should potentially prune irrelevant features to reduce noise and improve robustness. Techniques like recursive feature elimination, regularization path analysis, or dimensionality reduction (PCA or factor analysis) could help identify a more compact feature set (@adhithya2025income). Grouping rare country categories and carefully handling sparse education levels could also make the model steadier and easier to explain.
+For future work, we should explore multiple options, including conducting a more extensive hyperparameter searching on logistic regression or SVM-RBF and using techniques like recursive feature elimination, regularization path analysis, or dimensionality reduction methods to reduce possible noise in features (@adhithya2025income). Grouping rare country categories and carefully handling sparse education levels could also make the model steadier and easier to explain.
 
 Other ideas include:
 

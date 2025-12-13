@@ -272,7 +272,7 @@ Figure&nbsp;7: Native country counts. The vast majority are from the United Stat
 Table&nbsp;1: Cross validation summary for different models.
 </figcaption>
 <div aria-describedby="tbl-cv-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="12">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="3">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 14%">
@@ -384,7 +384,7 @@ Figure&nbsp;8: Top Postive and Negative Logistic Regression Coefficients.
 <li><p>Feature set: We only used variables available in the Adult dataset. Important factors such as local labor markets, industry trends, or social networks are not included.</p></li>
 <li><p>Fairness considerations: Even though we excluded race, the remaining features may still encode structural inequalities. A thorough fairness analysis (e.g., checking group-specific performance metrics) would be an important next step.</p></li>
 </ul>
-<p>For future work, we should potentially prune irrelevant features to reduce noise and improve robustness. Techniques like recursive feature elimination, regularization path analysis, or dimensionality reduction (PCA or factor analysis) could help identify a more compact feature set (<span class="citation" data-cites="adhithya2025income">Laxman (<a href="#ref-adhithya2025income" role="doc-biblioref">2024</a>)</span>). Grouping rare country categories and carefully handling sparse education levels could also make the model steadier and easier to explain.</p>
+<p>For future work, we should explore multiple options, including conducting a more extensive hyperparameter searching on logistic regression or SVM-RBF and using techniques like recursive feature elimination, regularization path analysis, or dimensionality reduction methods to reduce possible noise in features (<span class="citation" data-cites="adhithya2025income">Laxman (<a href="#ref-adhithya2025income" role="doc-biblioref">2024</a>)</span>). Grouping rare country categories and carefully handling sparse education levels could also make the model steadier and easier to explain.</p>
 <p>Other ideas include:</p>
 <ul>
 <li><p>Trying additional models such as gradient boosting or random forests.</p></li>
