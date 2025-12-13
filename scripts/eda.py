@@ -1,6 +1,12 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import pandas as pd
 import altair as alt
 import click
+
+from src.create_frequency_chart import create_frequency_chart
 
 alt.data_transformers.enable("vegafusion")
 
@@ -39,65 +45,24 @@ def main(input_dir,out_dir):
     age_density.save(out_dir+'age_density.png')
 
     # Marital Status - Frequency Chart
-    marital_status_freq = alt.Chart(adult_df).mark_bar().encode(
-        alt.X('count():Q', title='Count'),
-        alt.Y('marital-status:N', title='Marital Status').sort('x')
-    ).properties(
-        width=300,  
-        height=100 
-    )
-
-    marital_status_freq.save(out_dir+'marital_status_freq.png')
+    marital_status_freq = create_frequency_chart(adult_df, 'marital-status', height=100, title='Marital Status')
+    marital_status_freq.save(out_dir + 'marital_status_freq.png')
 
     # Race - Frequency Chart
-    race_freq = alt.Chart(adult_df).mark_bar().encode(
-        alt.X('count():Q', title='Count'),
-        alt.Y('race:N', title='Race').sort('x')
-    ).properties(
-        width=300,  
-        height=200 
-    )
-
-    race_freq.save(out_dir+'race_freq.png')
+    race_freq = create_frequency_chart(adult_df, 'race', title='Race')
+    race_freq.save(out_dir + 'race_freq.png')
 
     # Education - Frequency Chart
-    edu_freq = alt.Chart(adult_df).mark_bar().encode(
-        x='count()',
-        y=alt.Y('education', title='Education').sort('x')
-    ).properties(
-        width=300,  
-        height=200 
-    )
-
-    edu_freq.save(out_dir+'edu_freq.png')
+    edu_freq = create_frequency_chart(adult_df, 'education', title='Education')
+    edu_freq.save(out_dir + 'edu_freq.png')
 
     # Work Class - Frequency Chart
-    wc_freq = alt.Chart(adult_df).mark_bar().encode(
-        x='count()',
-        y=alt.Y('workclass', title='Work Class').sort('x')
-    ).properties(
-        width=300,  
-        height=200 
-    )
-
-    edu_freq.save(out_dir+'edu_freq.png')
-
+    wc_freq = create_frequency_chart(adult_df, 'workclass', title='Work Class')
+    wc_freq.save(out_dir + 'wc_freq.png')
 
     # Native Country - Frequency Chart
-    #adult_df['native-country'].value_counts()
-
-    nc_freq  = alt.Chart(adult_df).mark_bar().encode(
-    x='count()',
-    y=alt.Y('native-country:N', title='Native Country', sort='-x'),
-    tooltip=['native-country', 'count()']
-).properties(
-    width=400,
-    height=600,
-    title='Native Country Distribution'
-)
-
-
-    nc_freq.save(out_dir+'nc_freq.png')
+    nc_freq = create_frequency_chart(adult_df, 'native-country', width=400, height=600, title='Native Country')
+    nc_freq.save(out_dir + 'nc_freq.png')
 
     # alt.Chart(adult_df).mark_point(opacity=0.6, size=2).encode(
     #     alt.X(alt.repeat('row')).type('quantitative'),
