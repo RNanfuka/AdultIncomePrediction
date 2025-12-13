@@ -3158,7 +3158,7 @@ package:
   category: main
   optional: false
 - name: fonttools
-  version: 4.61.0
+  version: 4.61.1
   manager: conda
   platform: linux-aarch64
   dependencies:
@@ -3167,10 +3167,10 @@ package:
     munkres: ''
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-aarch64/fonttools-4.61.0-py313hd3a54cf_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-aarch64/fonttools-4.61.1-py313hd3a54cf_0.conda
   hash:
-    md5: 919d48c0da7609f5046aebee2ed6a02b
-    sha256: f223b8d4dc7256bc5142127b8de7738be478d7f5e5eee3047be43660f287ce7c
+    md5: fc08ffb962c253e033fda3188421be89
+    sha256: b1fc9ce92b6a23e97d7681d8641c3005e45b360ec6bd32e1dec0f95d78a09b32
   category: main
   optional: false
 - name: fonttools
