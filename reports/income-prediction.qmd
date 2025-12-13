@@ -25,6 +25,9 @@ rbf_accuracy = str(np.round(cv_summary.loc['SVM-RBF', 'test_accuracy_mean'], 3))
 ```
 
 ## Summary
+
+Income inequality is a central concern in labor economics, motivating the use of census data to understand earnings outcomes. In this project, we examine how accurately classification models can predict whether an individual’s income exceeds $50K per year using demographic and employment variables.
+
 Here, we tried to find the classification models with the highest accuracy on predicting if an individual's income is greater than 50K/yr based on census data. Our final classifier has a reasonable performance on the unseen test data. We observed the Logistic Regression validation accuracy of `{python} lr_accuracy` and the RBF-SVM test accuracy of `{python} rbf_accuracy`.
 
 The prediction model can possibly be further improved by pruning more features that are irrelevant to the prediction, since we are using almost all of the features for fitting the classifiers.

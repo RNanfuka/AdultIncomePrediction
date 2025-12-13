@@ -2,11 +2,17 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
-from typing import List
 
 import click
 import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.clean_dataset import clean_dataset
 
 COLUMN_NAMES = [
     "age",
@@ -99,31 +105,7 @@ def load_raw_file(path: Path) -> pd.DataFrame:
     )
 
 
-def clean_dataset(dfs: List[pd.DataFrame]) -> pd.DataFrame:
-    """Combine, trim whitespace, and normalize the income labels."""
-    combined = pd.concat(dfs, ignore_index=True)
-    combined = combined.dropna(how="all")
-
-    # Strip whitespace from string columns.
-    for column in combined.select_dtypes(include="object").columns:
-        combined[column] = combined[column].str.strip()
-
-    combined = combined.replace("?", pd.NA)
-
-    combined = combined[combined["income"].notna()]
-    combined["income"] = combined["income"].str.replace("<=50K.", "<=50K", regex=False)
-    combined["income"] = combined["income"].str.replace(">50K.", ">50K", regex=False)
-    combined = combined[combined["income"] != ""]
-
-    if "education" in combined.columns:
-        combined["education"] = combined["education"].replace(education_mapping)
-    if "marital-status" in combined.columns:
-        combined["marital-status"] = combined["marital-status"].replace(
-            marital_status_mapping
-        )
-
-    return combined
 
 
 if __name__ == "__main__":
-    main()
+    main() 
