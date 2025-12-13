@@ -2,6 +2,8 @@
 
 This project explores the Adult Income dataset to understand how demographic and work-related factors relate to earning more or less than **$50,000 per year**. It provides a fully reproducible **Make + Docker + Quarto** workflow for data preparation, validation, exploratory data analysis (EDA), modeling, and report rendering.
 
+Website: <https://rnanfuka.github.io/AdultIncomePrediction/>
+
 ## Contributors
 - Chun-Mien Liu  
 - Rebecca Rosette Nanfuka  
