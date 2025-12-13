@@ -31,12 +31,13 @@ import matplotlib.pyplot as plt
 import joblib
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_validate, RandomizedSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from scipy.stats import loguniform
+from src.model_evaluation import evaluate_models
 
 
 def ensure_dir(path: Path) -> Path:
@@ -64,41 +65,6 @@ def build_models() -> Dict[str, object]:
         "LogisticRegression": LogisticRegression(max_iter=500, random_state=42),
         "GaussianNB": GaussianNB(),
     }
-
-
-def evaluate_models(
-    models: Dict[str, object],
-    X: pd.DataFrame,
-    y: pd.Series,
-    cv_folds: int,
-    n_jobs: int,
-) -> pd.DataFrame:
-    rows = []
-    for name, model in models.items():
-        scores = cross_validate(
-            model,
-            X,
-            y,
-            cv=cv_folds,
-            return_train_score=True,
-            n_jobs=n_jobs,
-        )
-        rows.append(
-            {
-                "model": name,
-                "train_accuracy_mean": scores["train_score"].mean(),
-                "train_accuracy_std": scores["train_score"].std(),
-                "test_accuracy_mean": scores["test_score"].mean(),
-                "test_accuracy_std": scores["test_score"].std(),
-                "fit_time_mean": scores["fit_time"].mean(),
-                "score_time_mean": scores["score_time"].mean(),
-            }
-        )
-    return (
-        pd.DataFrame(rows)
-        .set_index("model")
-        .sort_values("test_accuracy_mean", ascending=False)
-    )
 
 
 def run_hyperparameter_search(
