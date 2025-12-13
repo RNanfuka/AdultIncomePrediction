@@ -1,6 +1,6 @@
 # Adult Income Prediction
 
-This project explores the Adult Income dataset to understand how demographic and work-related factors relate to earning more or less than \$50,000 per year. It includes a reproducible pipeline for data prep, modeling, and a Quarto report.
+This project explores the Adult Income dataset to understand how demographic and work-related factors relate to earning more or less than \$50,000 per year. It includes a reproducible pipeline for data prep, modeling, and a Quarto report. Report can be found at <https://rnanfuka.github.io/AdultIncomePrediction/reports/income-prediction.html>.
 
 ## Contributors
 - Chun-Mien Liu
