@@ -11,3 +11,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Address Peer Review Issue: Document Scripts Argument [#51](https://github.com/RNanfuka/AdultIncomePrediction/issues/51).
 - Updated the LICENSE.md file to include the name of the group members (Q3.8 of Milestone 1)
 - Added background and importance of the project to the income-prediction.qmd (https://github.com/RNanfuka/AdultIncomePrediction/issues/57)
+- Address Peer Review Issue: added dependency to Readme.md [#62](https://github.com/RNanfuka/AdultIncomePrediction/issues/62)
+
