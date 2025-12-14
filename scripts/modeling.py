@@ -24,6 +24,9 @@ from typing import Dict
 # Limit joblib worker discovery in constrained environments
 os.environ.setdefault("LOKY_MAX_CPU_COUNT", "1")
 
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import numpy as np
 import pandas as pd
 import click
@@ -76,7 +79,7 @@ def run_hyperparameter_search(
     svm_iter: int,
 ) -> tuple[pd.DataFrame, LogisticRegression, SVC]:
     log_reg_search = RandomizedSearchCV(
-        LogisticRegression(max_iter=1000, random_state=42),
+        LogisticRegression(max_iter=500, random_state=42),
         param_distributions={
             "C": loguniform(1e-3, 1e3),
             "penalty": ["l2"],
@@ -205,7 +208,7 @@ def save_table_image(df: pd.DataFrame, output_path: Path, title: str) -> None:
 )
 @click.option(
     "--log-reg-iter",
-    default=50,
+    default=1,
     show_default=True,
     type=int,
     help="Randomized search iterations for Logistic Regression.",

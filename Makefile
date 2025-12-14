@@ -86,7 +86,7 @@ model: $(MODEL_ARTIFACTS) ## Train models and generate artifacts
 
 $(MODEL_ARTIFACTS): scripts/modeling.py $(TRAIN_PREP)
 	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
-		--cv-folds 5 --top-n 10 --log-reg-iter 10 --svm-iter 10
+		--cv-folds 5 --top-n 10 --log-reg-iter 3 --svm-iter 3 --save-pickles
 
 clean: ## Remove processed data and figures (keeps directories)
 	rm -rf data/processed
@@ -111,7 +111,7 @@ preprocess-data: ## Preprocess train and test data
 
 model-train: ## Train models with hyperparameter search
 	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
-		--cv-folds 5 --top-n 10 --log-reg-iter 10 --svm-iter 10
+		--cv-folds 5 --top-n 10 --log-reg-iter 3 --svm-iter 3 --save-pickles
 
 model-reuse: ## Reuse tuned models to regenerate tables/figures
 	python scripts/modeling.py --data-dir data --artifacts-dir artifacts \
